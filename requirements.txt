@@ -1,0 +1,4 @@
+fastapi[all] == 0.111.1
+
+# https://pypi.org/project/fastapi-offline/
+fastapi-offline == 1.7.1
