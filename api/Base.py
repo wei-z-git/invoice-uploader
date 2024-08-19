@@ -1,10 +1,16 @@
-from fastapi import APIRouter,Query
-from api.UploadController import K8sController
+from fastapi import APIRouter, File, Form
 from typing import Optional
+from api.UploadController import UploadController
 
-router = APIRouter(prefix="/om/v1", tags=["O&M API Routes"])
+router = APIRouter(prefix="/v1", tags=["upload"])
 
-@router.get("/k8s/env/get",summary="get k8s environment variable")
-async def get_environment_variable(namespace: Optional[str] = Query("rt-cn", description="Namespace to get environment variable for"),pod_name: Optional[str] = Query("runtime-test-service-deployment-5c8b585bbf-crf58", description="Pod name to get environment variable for")):
-    k=K8sController()
-    return await k.get_environment_variable(namespace,pod_name)
+
+@router.post("/upload/", summary="upload files")
+async def _():
+    # 读取文件内容
+    f=UploadController()
+    file=await f.upload_files(file=File(...),
+                       description=Form(...),
+                       title=Form(...))
+    res=await f.send_files_to_git(file,file["description"])
+    return res

@@ -8,8 +8,7 @@ from configs.config import settings
 
 app = FastAPIOffline(
     version='0.0.1',
-    title='RuntimeOpenapiPlatform',
-    root_path=settings.ROOT_PATH
+    title='RuntimeOpenapiPlatform'
     )
 
 # app.root_path = "/api"
