@@ -5,7 +5,12 @@ import httpx,json
 
 class UploadController:
     def __init__(self):
-        self.subscription_id = 'd07c204e-68de-4e1f-83f6-7cfa5f6afc0d'
+        self.endpoint = "gitee.com"
+        self.owner = "amadeus666"
+        self.repo="Invoice"
+        self.path_prefix="ToBeOrganized/"
+        self.access_token="4fef6165fcdd31f45da7ea514a3aa924"
+
         
     async def upload_files(self,file: UploadFile = File(...),
                        description: str = Form(...),
@@ -19,21 +24,20 @@ class UploadController:
             "filename": file.filename,
             "content_type": file.content_type,
             "description": description,
-            "title": title
+            "title": title,
+            "file_content":file_content
         }
-    async  def send_files_to_git(self, files,description):
-        # get Blob SHA of the file
-        sha = json.loads(httpx.get(
-            "https://{endpoint}/api/v5/repos/{owner}/{repo}/contents/{path}?access_token={access_token}".format(endpoint=self.endpoint, owner=self.owner, repo=self.repo, path=self.path, access_token=self.access_token)).text)['sha']
+    async  def send_files_to_git(self, title,description,file_content):
+        path=self.path_prefix+title
 
 
         payload_dict = {
             'access_token': self.access_token,
-            'content': files,
-            'sha': sha,
+            'content': file_content,
             'message': description
         }
-        response = httpx.put(
-            "https://{endpoint}/api/v5/repos/{owner}/{repo}/contents/{path}".format(endpoint=self.endpoint, owner=self.owner, repo=self.repo, path=self.path), data=payload_dict).text
+        
+        response = httpx.post(
+            "https://{endpoint}/api/v5/repos/{owner}/{repo}/contents/{path}".format(endpoint=self.endpoint, owner=self.owner, repo=self.repo, path=path), data=payload_dict).text
         print (response)
         return response
