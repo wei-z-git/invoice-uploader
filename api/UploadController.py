@@ -38,11 +38,14 @@ class UploadController:
             'content': file_content,
             'message': description
         }
-        response = httpx.post(
-            "https://{endpoint}/api/v5/repos/{owner}/{repo}/contents/{path}".format(endpoint=self.endpoint, owner=self.owner, repo=self.repo, path=path), data=payload_dict)
-        if response.status_code != 200:
-            res=fail(msg="Upload failed!")
-        else:
-            res=success("ok",msg="Get env var successfully!")
+        try:
+            response = httpx.post(
+                "https://{endpoint}/api/v5/repos/{owner}/{repo}/contents/{path}".format(endpoint=self.endpoint, owner=self.owner, repo=self.repo, path=path), data=payload_dict)
+            if 200 <= response.status_code < 300:
+                res=success("ok",msg="Upload done!")
+            else:
+                res=fail(msg="Upload failed!")
+        except Exception as e:
+            res = fail(msg=f"An error occurred: {e}")
         
         return res
