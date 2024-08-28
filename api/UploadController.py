@@ -15,8 +15,8 @@ class UploadController:
         self.access_token = "4fef6165fcdd31f45da7ea514a3aa924"
 
     async def upload_files(self, file: UploadFile = File(...),
-                           title: str = Form(...),
-                           description: str = Form(...)
+                           invoicetype: str = Form(...),
+                           title: str = Form(...)
                            ) -> dict:
         """
         """
@@ -24,19 +24,19 @@ class UploadController:
         file_content_encoded = base64.b64encode(file_content).decode()
         filename,file_extension = os.path.splitext(file.filename)
         return {
+            "invoicetype": invoicetype,
             "title": title,
-            "description": description,
             "file_extension": file_extension,
             "file_content": file_content_encoded
         }
 
-    async def send_files_to_git(self, title, description, file_content,file_extension):
-        path = self.path_prefix+title+file_extension
+    async def send_files_to_git(self, invoicetype, title, file_content,file_extension):
+        path = self.path_prefix+invoicetype+title+file_extension
 
         payload_dict = {
             'access_token': self.access_token,
             'content': file_content,
-            'message': description
+            'message': title
         }
         try:
             response = httpx.post(
