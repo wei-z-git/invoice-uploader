@@ -3,7 +3,7 @@ from configs.config import settings
 from fastapi import File, UploadFile, Form
 import httpx
 import os
-import json,base64
+import base64
 
 
 class UploadController:
@@ -12,7 +12,7 @@ class UploadController:
         self.owner = "amadeus666"
         self.repo = "Invoice"
         self.path_prefix = "ToBeOrganized/"
-        self.access_token = "4fef6165fcdd31f45da7ea514a3aa924"
+        self.access_token = settings.GITEE_ACCESS_TOKEN
 
     async def upload_files(self, file: UploadFile = File(...),
                            invoicetype: str = Form(...),

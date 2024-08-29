@@ -8,9 +8,7 @@ class Config(BaseSettings):
     # load environment variables
     load_dotenv(find_dotenv(), verbose=True, override=True)
     ROOT_PATH: str = "/"
-    AKS_CLUSTER_NAME: str = "rtmc-btccndly-02"
-    CLIENT_ID: str = "xxx"
-    CLIENT_SECRET: str = "xxx"
+    GITEE_ACCESS_TOKEN: str = ""
 
 
 settings = Config()
